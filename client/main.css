@@ -1,0 +1,9 @@
+#chatBox {
+    float: none;
+    display: table-cell;
+    vertical-align: bottom;
+}
+
+#chatCol {
+    height: 100%;
+}
