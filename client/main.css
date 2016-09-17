@@ -1,9 +1,33 @@
-#chatBox {
-    float: none;
-    display: table-cell;
-    vertical-align: bottom;
+html, body {
+    height: 100%;
 }
 
-#chatCol {
-    height: 100%;
+#chatCol, div {
+    display: block;
+    max-height: 80vh;
+  /*  height: 80%; */
+}
+
+#mainBoard .row {
+    padding: 50px;
+}
+
+#mainBoard img {
+    border: 2px solid black;
+    border-radius: 5px;
+
+/* rotate cards because woof */
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    transform: rotate(90deg);
+}
+
+.glowRed {
+    box-shadow: 0px 0px 15px red;
+}
+
+.glowGreen {
+    box-shadow: 0px 0px 15px green;
 }

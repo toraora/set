@@ -5,15 +5,21 @@ import { Row, Col, Grid, Panel, FormControl, Button } from 'react-bootstrap';
 
 import './main.css';
 import { AccountsUIWrapper } from './accounts';
+import { ChatPanelContainer } from './chat';
+import { SetBoardContainer } from './set';
+
+// MAIN ENTRYPOINT
+Meteor.startup(() => render(<MainPageContainer />, document.getElementById('root')));
 
 class MainPage extends React.Component<any, {}> {
     renderMainArea() {
         if (this.props.user) {
             return <Row id='mainContent'>
-                <Col sm={8} > hi! </Col>
-                <Col sm={4} id='chatCol'>
-                    <ChatPanelContainer />
-                    
+                <Col sm={8} >
+                    <SetBoardContainer />
+                </Col>
+                <Col sm={4}>
+                    <ChatPanelContainer />                   
                 </Col>
             </Row>;
         } else {
@@ -42,40 +48,3 @@ var MainPageContainer = createContainer(() => {
     }
 }, MainPage)
 
-// MAIN ENTRYPOINT
-Meteor.startup(() => render(<MainPageContainer />, document.getElementById('root')));
-
-class ChatPanel extends React.Component<any, any> {
-    handleSend() {
-        console.log(this.refs['chatInput']);
-    }
-
-    renderMessage(message: any) {
-        return <div>
-            <hr />
-            <span> <b>{message.user} ({message.time})</b>: {message.message} </span>
-        </div>
-    }
-
-    render() {
-        return <Panel>
-            <Row>
-                <Col sm={9}>
-                    <FormControl ref='chatInput' componentClass='input' />
-                </Col>
-                <Col sm={3}> 
-                    <Button bsStyle='primary' onClick={this.handleSend.bind(this)}>
-                        Send
-                    </Button> 
-                </Col>
-            </Row>
-            {this.props.messages.map(this.renderMessage)}
-        </Panel>; 
-    }
-}
-
-var ChatPanelContainer = createContainer(() => {
-    return {
-        messages: [{user: "woof", time: "12:00:00", message: "bark bark!"}]
-    }
-}, ChatPanel)

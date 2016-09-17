@@ -3,6 +3,8 @@ import * as ReactDOM from 'react-dom';
 
 import * as _ from 'lodash';
 import { Accounts } from 'meteor/accounts-base';
+
+declare var Template: any, Blaze: any;
  
 Accounts.ui.config({
   passwordSignupFields: 'USERNAME_ONLY',
@@ -10,12 +12,12 @@ Accounts.ui.config({
 
 export class AccountsUIWrapper extends React.Component<{}, {}> {
     componentDidMount() {
-        this.view = Blaze.render(Template['loginButtons'],
-        ReactDOM.findDOMNode(this.refs.blazeContainer));
+        (this as any).view = Blaze.render(Template['loginButtons'],
+        ReactDOM.findDOMNode((this as any).refs.blazeContainer));
     }
 
     componentWillUnmount() {
-        Blaze.remove(this.view);
+        Blaze.remove((this as any).view);
     }
 
     render() {
