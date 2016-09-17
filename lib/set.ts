@@ -74,8 +74,7 @@ Meteor.methods({
             if (state.cards.length > 12) {
                 state.cards[idx1] = '';
                 state.cards[idx2] = '';
-                state.cards[idx3] = '';
-                state.cards = state.cards.filter(s => s.length != 0);
+                state.cards[idx3] = '';     
             } else if (state.deck.length > 0) {
                 state.cards[idx1] = state.deck.pop();
                 state.cards[idx2] = state.deck.pop();
@@ -85,6 +84,7 @@ Meteor.methods({
                 state.cards[idx2] = '';
                 state.cards[idx3] = '';
             }
+            state.cards = state.cards.filter(s => s.length != 0);
             SetGameStateCollection.update({_id: state._id}, state);
         }
     }
