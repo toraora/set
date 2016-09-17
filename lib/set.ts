@@ -40,24 +40,26 @@ Meteor.methods({
         SetGameStateCollection.upsert({room: room}, state);
     },
 
-    attemptSet(idx1: number, idx2: number, idx3: number, room: string) {
+    attemptSet(indices: Array<number>, room: string) {
         if (!Meteor.user() || Meteor.isClient)
             return;
         var state = SetGameStateCollection.findOne({room: room});
         if (!state)
             return;
+        if (indices.length != 3)
+            return;
         
-        let card1 = parseInt(state.cards[idx1]) - 1;
+        let card1 = parseInt(state.cards[indices[0]]) - 1;
         let card1att1 = card1 % 3;
         let card1att2 = Math.floor(card1 / 3) % 3;
         let card1att3 = Math.floor(card1 / 9) % 3;
         let card1att4 = Math.floor(card1 / 27);
-        let card2 = parseInt(state.cards[idx2]) - 1;
+        let card2 = parseInt(state.cards[indices[1]]) - 1;
         let card2att1 = card2 % 3;
         let card2att2 = Math.floor(card2 / 3) % 3;
         let card2att3 = Math.floor(card2 / 9) % 3;
         let card2att4 = Math.floor(card2 / 27);
-        let card3 = parseInt(state.cards[idx3]) - 1;
+        let card3 = parseInt(state.cards[indices[2]]) - 1;
         let card3att1 = card3 % 3;
         let card3att2 = Math.floor(card3 / 3) % 3;
         let card3att3 = Math.floor(card3 / 9) % 3;
@@ -74,19 +76,14 @@ Meteor.methods({
             else
                 state.score[Meteor.user().username] = 3;
             if (state.cards.length > 12) {
-                state.cards[idx1] = '';
-                state.cards[idx2] = '';
-                state.cards[idx3] = '';     
+                setFilter(indices, state.cards);    
             } else if (state.deck.length > 0) {
-                state.cards[idx1] = state.deck.pop();
-                state.cards[idx2] = state.deck.pop();
-                state.cards[idx3] = state.deck.pop();
+                state.cards[indices[0]] = state.deck.pop();
+                state.cards[indices[1]] = state.deck.pop();
+                state.cards[indices[2]] = state.deck.pop();
             } else {
-                state.cards[idx1] = '';
-                state.cards[idx2] = '';
-                state.cards[idx3] = '';
+                setFilter(indices, state.cards);  
             }
-            state.cards = state.cards.filter(s => s.length != 0);
             SetGameStateCollection.update({_id: state._id}, state);
         }
     },
@@ -106,3 +103,16 @@ Meteor.methods({
         }
     }
 });
+
+let setFilter = function(indices: Array<number>, cards: Array<string>) {
+    let numCards = cards.length;
+    indices.sort((a,b) => a-b);
+    var fillIdx = 0;
+    for (let i = 0; i < 3; i++) {
+        var card = cards.pop();
+        if (indices.includes(numCards-1-i)) 
+            continue;
+        cards[indices[fillIdx++]] = card;
+    }
+    return cards;
+}

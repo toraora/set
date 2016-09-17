@@ -7,24 +7,57 @@ import { Row, Col, Image, Button } from 'react-bootstrap';
 
 import { SetGameState, SetGameStateCollection } from '../lib/set';
 
+declare var Mousetrap: any;
+
 class SetCard extends React.Component<any, any> {
     render() {
         var size = 2;
         if (this.props.count > 18)
             size = 1;
-        if (this.props.class) {
+        if (this.props.selected) {
             return <Col sm={size}>
-                <Image className={this.props.class} src={'/img/' + this.props.card + '.gif'} /> 
+                <span>{this.props.cardnum}</span>
+                <Image className='glowGreen' src={'/img/' + this.props.card + '.gif'} onClick={this.props.onClick}/> 
             </Col>;
         } else {
             return <Col sm={size}>
-                <Image src={'/img/' + this.props.card + '.gif'} /> 
+                <span>{this.props.cardnum}</span>
+                <Image src={'/img/' + this.props.card + '.gif'} onClick={this.props.onClick}/> 
             </Col>;
         }
     }
 }
 
 class SetBoard extends React.Component<any, any> {
+    constructor(props) {
+        super(props);
+        this.state = {
+            selected: new Array<number>()
+        };
+    }
+
+    handleSelectCard(cardnum: number) {
+        if (_.includes(this.state.selected, cardnum)) {
+            this.state.selected.splice(this.state.selected.indexOf(cardnum), 1);
+            this.setState({
+                selected: this.state.selected
+            });
+            return;
+        }
+        if (cardnum < 0 || cardnum >= this.props.state.cards.length)
+            return;
+        this.state.selected.push(cardnum);
+        this.setState({
+            selected: this.state.selected
+        });
+        if (this.state.selected.length == 3) {
+            Meteor.call('attemptSet', this.state.selected, 'test');
+            this.setState({
+                selected: new Array<number>()
+            });
+        }
+    }
+
     startNew() {
         Meteor.call('startNew', 'test');
     }
@@ -34,7 +67,14 @@ class SetBoard extends React.Component<any, any> {
     }
 
     renderCard(cardnum: number) {
-        return <SetCard key={cardnum} card={this.props.state.cards[cardnum]} count={this.props.state.cards.length} />;
+        return <SetCard 
+            cardnum={cardnum} 
+            key={cardnum} 
+            card={this.props.state.cards[cardnum]} 
+            count={this.props.state.cards.length} 
+            selected={_.includes(this.state.selected, cardnum)}
+            onClick={() => this.handleSelectCard.bind(this)(cardnum)}
+        />;
     }
 
     renderCardRow(grpnum: number) {
@@ -51,7 +91,7 @@ class SetBoard extends React.Component<any, any> {
                 <Row>
                     <Button bsStyle='warning' onClick={this.startNew}>Reset Board</Button>
                     &nbsp;&nbsp;&nbsp;
-                    <Button bsStyle='primary'>Woooooooof!</Button>
+                    <Button bsStyle='danger'>wooooooooooooooooof!</Button>
                     &nbsp;&nbsp;&nbsp;
                     <Button bsStyle='primary' onClick={this.addCards}>Add Cards</Button>
                 </Row>

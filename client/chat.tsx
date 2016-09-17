@@ -39,7 +39,10 @@ class ChatPanel extends React.Component<any, any> {
     renderMessage(message: ChatMessage) {
         return <div key={message._id}>
             <hr />
-            <span> <b>{message.user} ({message.time.toLocaleTimeString()})</b>: {message.message} </span>
+            <span> 
+                <b>{message.user} ({message.time.toLocaleTimeString()})</b>: 
+                {message.message} 
+            </span>
         </div>
     }
 
@@ -47,7 +50,11 @@ class ChatPanel extends React.Component<any, any> {
         return <div id='chatCol'><Panel>
             <Row>
                 <Col sm={9}>
-                    <FormControl value={this.state.message} onChange={e => this.handleInput.bind(this)(e)} onKeyPress={(e) => this.handleEnter.bind(this)(e)}/>
+                    <FormControl 
+                        value={this.state.message} 
+                        onChange={e => this.handleInput.bind(this)(e)} 
+                        onKeyPress={(e) => this.handleEnter.bind(this)(e)}
+                    />
                 </Col>
                 <Col sm={3}> 
                     <Button bsStyle='primary' onClick={this.handleSend.bind(this)}>

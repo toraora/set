@@ -1,20 +1,11 @@
-html, body {
-    height: 100%;
-}
-
-#chatCol, div {
-    display: block;
-    max-height: 80vh;
-  /*  height: 80%; */
-}
-
 #mainBoard .row {
     padding: 50px;
 }
 
 #mainBoard img {
-    border: 2px solid black;
-    border-radius: 5px;
+    position: relative;
+    border: 1px solid black;
+    border-radius: 10px;
 
     width: 150%;
 
