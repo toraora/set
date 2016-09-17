@@ -118,7 +118,6 @@ class SetBoard extends React.Component<any, any> {
     }
 
     render() {
-        console.log(this.props.state);
         if (this.props.state) {
             return <Row>
                 <Col sm={6}>
