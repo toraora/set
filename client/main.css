@@ -1,5 +1,5 @@
 #mainBoard .row {
-    padding: 50px;
+    padding: 10px;
 }
 
 #mainBoard img {
@@ -7,14 +7,11 @@
     border: 1px solid black;
     border-radius: 10px;
 
-    width: 150%;
+    width: 100%;
 
 /* rotate cards because woof */
-    -webkit-transform: rotate(90deg);
-    -moz-transform: rotate(90deg);
-    -o-transform: rotate(90deg);
-    -ms-transform: rotate(90deg);
-    transform: rotate(90deg);
+  /*  transform: rotate(90deg); */
+  /* or not */
 }
 
 .col-sm-1 img {

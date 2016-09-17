@@ -11,16 +11,13 @@ declare var Mousetrap: any;
 
 class SetCard extends React.Component<any, any> {
     render() {
-        var size = 2;
-        if (this.props.count > 18)
-            size = 1;
         if (this.props.selected) {
-            return <Col sm={size}>
+            return <Col sm={4}>
                 <span>{this.props.cardnum}</span>
                 <Image className='glowGreen' src={'/img/' + this.props.card + '.gif'} onClick={this.props.onClick}/> 
             </Col>;
         } else {
-            return <Col sm={size}>
+            return <Col sm={4}>
                 <span>{this.props.cardnum}</span>
                 <Image src={'/img/' + this.props.card + '.gif'} onClick={this.props.onClick}/> 
             </Col>;
@@ -71,29 +68,32 @@ class SetBoard extends React.Component<any, any> {
             cardnum={cardnum} 
             key={cardnum} 
             card={this.props.state.cards[cardnum]} 
-            count={this.props.state.cards.length} 
             selected={_.includes(this.state.selected, cardnum)}
             onClick={() => this.handleSelectCard.bind(this)(cardnum)}
         />;
     }
 
     renderCardRow(grpnum: number) {
-        let numInRow = this.props.state.cards.length / 3;
         return <Row key={grpnum}>
-            {_.range(numInRow).map(i => this.renderCard(grpnum + i*3))}
+            {_.range(3).map(i => this.renderCard(grpnum*3 + i))}
         </Row>;
     }
 
     render() {
         if (this.props.state) {
             return <div id='mainBoard'>
-                {_.range(3).map(this.renderCardRow.bind(this))}
                 <Row>
-                    <Button bsStyle='warning' onClick={this.startNew}>Reset Board</Button>
-                    &nbsp;&nbsp;&nbsp;
-                    <Button bsStyle='danger'>wooooooooooooooooof!</Button>
-                    &nbsp;&nbsp;&nbsp;
-                    <Button bsStyle='primary' onClick={this.addCards}>Add Cards</Button>
+                    <Col sm={6}>
+                        Scoreboard or something
+                    </Col>
+                    <Col sm={6}>
+                        {_.range(this.props.state.cards.length / 3).map(this.renderCardRow.bind(this))}
+                        <Row>
+                            <Button bsStyle='warning' onClick={this.startNew}>Reset Board</Button>
+                            &nbsp;&nbsp;&nbsp;
+                            <Button bsStyle='primary' onClick={this.addCards}>Add Cards</Button>
+                        </Row>
+                    </Col>         
                 </Row>
             </div>;
         } else {
