@@ -105,13 +105,27 @@ class SetBoard extends React.Component<any, any> {
         </Row>;
     }
 
+    renderScore(user: string) {
+        return <Row key={user}>
+            <hr />
+            <Col sm={8}>
+                <b>{user}</b>
+            </Col>
+            <Col sm={4}>
+                {this.props.state.score[user]}
+            </Col>
+        </Row>
+    }
+
     render() {
+        console.log(this.props.state);
         if (this.props.state) {
-            return <div id='mainBoard'>
-                <Row>
-                    <Col sm={6}>
-                        Scoreboard or something
-                    </Col>
+            return <Row>
+                <Col sm={6}>
+                    <Row><Col sm={8}><h4>Name</h4></Col><Col sm={4}><h4>Score</h4></Col></Row>
+                    {Object.keys(this.props.state.score).map(this.renderScore.bind(this))}
+                </Col>
+                <div id='mainBoard'>
                     <Col sm={6}>
                         {_.range(this.props.state.cards.length / 3).map(this.renderCardRow.bind(this))}
                         <Row>
@@ -119,9 +133,9 @@ class SetBoard extends React.Component<any, any> {
                             &nbsp;&nbsp;&nbsp;
                             <Button bsStyle='primary' onClick={this.addCards}>Add Cards</Button>
                         </Row>
-                    </Col>         
-                </Row>
-            </div>;
+                    </Col>   
+                </div>
+            </Row>;
         } else {
             return <div id='pendingStart'>
                 <Row>
