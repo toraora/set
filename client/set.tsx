@@ -9,12 +9,15 @@ import { SetGameState, SetGameStateCollection } from '../lib/set';
 
 class SetCard extends React.Component<any, any> {
     render() {
+        var size = 2;
+        if (this.props.count > 18)
+            size = 1;
         if (this.props.class) {
-            return <Col sm={3}>
+            return <Col sm={size}>
                 <Image className={this.props.class} src={'/img/' + this.props.card + '.gif'} /> 
             </Col>;
         } else {
-            return <Col sm={3}>
+            return <Col sm={size}>
                 <Image src={'/img/' + this.props.card + '.gif'} /> 
             </Col>;
         }
@@ -23,28 +26,34 @@ class SetCard extends React.Component<any, any> {
 
 class SetBoard extends React.Component<any, any> {
     startNew() {
-        console.log("woof");
         Meteor.call('startNew', 'test');
     }
 
-    renderCardGroup(grpnum: number) {
+    addCards() {
+        Meteor.call('addCards', 'test');
+    }
+
+    renderCard(cardnum: number) {
+        return <SetCard key={cardnum} card={this.props.state.cards[cardnum]} count={this.props.state.cards.length} />;
+    }
+
+    renderCardRow(grpnum: number) {
+        let numInRow = this.props.state.cards.length / 3;
         return <Row key={grpnum}>
-            <SetCard card={this.props.state.cards[grpnum*4]} />
-            <SetCard card={this.props.state.cards[grpnum*4+1]} />
-            <SetCard card={this.props.state.cards[grpnum*4+2]} />
-            <SetCard card={this.props.state.cards[grpnum*4+3]} />
+            {_.range(numInRow).map(i => this.renderCard(grpnum + i*3))}
         </Row>;
     }
 
     render() {
-        console.log(this.props.state);
         if (this.props.state) {
             return <div id='mainBoard'>
-                {_.range(this.props.state.cards.length / 4).map(this.renderCardGroup.bind(this))}
+                {_.range(3).map(this.renderCardRow.bind(this))}
                 <Row>
-                    <Button bsStyle='warning'>Reset Board</Button>
+                    <Button bsStyle='warning' onClick={this.startNew}>Reset Board</Button>
                     &nbsp;&nbsp;&nbsp;
                     <Button bsStyle='primary'>Woooooooof!</Button>
+                    &nbsp;&nbsp;&nbsp;
+                    <Button bsStyle='primary' onClick={this.addCards}>Add Cards</Button>
                 </Row>
             </div>;
         } else {

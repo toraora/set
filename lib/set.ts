@@ -44,6 +44,8 @@ Meteor.methods({
         if (!Meteor.user() || Meteor.isClient)
             return;
         var state = SetGameStateCollection.findOne({room: room});
+        if (!state)
+            return;
         
         let card1 = parseInt(state.cards[idx1]) - 1;
         let card1att1 = card1 % 3;
@@ -85,6 +87,21 @@ Meteor.methods({
                 state.cards[idx3] = '';
             }
             state.cards = state.cards.filter(s => s.length != 0);
+            SetGameStateCollection.update({_id: state._id}, state);
+        }
+    },
+
+    addCards(room: string) {
+        if (!Meteor.user() || Meteor.isClient)
+            return;
+        var state = SetGameStateCollection.findOne({room: room});
+        if (!state)
+            return;
+
+        if (state.deck.length > 0) {
+            state.cards.push(state.deck.pop());
+            state.cards.push(state.deck.pop());
+            state.cards.push(state.deck.pop());
             SetGameStateCollection.update({_id: state._id}, state);
         }
     }

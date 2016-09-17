@@ -16,12 +16,18 @@ html, body {
     border: 2px solid black;
     border-radius: 5px;
 
+    width: 150%;
+
 /* rotate cards because woof */
     -webkit-transform: rotate(90deg);
     -moz-transform: rotate(90deg);
     -o-transform: rotate(90deg);
     -ms-transform: rotate(90deg);
     transform: rotate(90deg);
+}
+
+.col-sm-1 img {
+    width: 300% !important;
 }
 
 .glowRed {
