@@ -1,5 +1,6 @@
 import * as _ from 'lodash';
 import * as React from 'react';
+import * as Mousetrap from 'mousetrap';
 import { render } from 'react-dom';
 import { createContainer } from 'meteor/react-meteor-data';
 
@@ -7,7 +8,29 @@ import { Row, Col, Image, Button } from 'react-bootstrap';
 
 import { SetGameState, SetGameStateCollection } from '../lib/set';
 
-declare var Mousetrap: any;
+let keymap: { [key: string]: number; } = {
+    'a': 0,
+    'b': 1,
+    'c': 2,
+    'd': 3,
+    'e': 4,
+    'f': 5,
+    'g': 6,
+    'h': 7,
+    'i': 8,
+    'j': 9,
+    'k': 10,
+    'l': 11,
+    'm': 12,
+    'n': 13,
+    'o': 14,
+    'p': 15,
+    'q': 16,
+    'r': 17,
+    's': 18,
+    't': 19,
+    'u': 20
+};
 
 class SetCard extends React.Component<any, any> {
     render() {
@@ -31,6 +54,9 @@ class SetBoard extends React.Component<any, any> {
         this.state = {
             selected: new Array<number>()
         };
+        for (var key in keymap) {
+            Mousetrap.bind(key, (e) => this.handleSelectCard.bind(this)(keymap[e.key]));
+        }
     }
 
     handleSelectCard(cardnum: number) {

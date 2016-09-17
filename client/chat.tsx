@@ -53,7 +53,7 @@ class ChatPanel extends React.Component<any, any> {
                     <FormControl 
                         value={this.state.message} 
                         onChange={e => this.handleInput.bind(this)(e)} 
-                        onKeyPress={(e) => this.handleEnter.bind(this)(e)}
+                        onKeyPress={e => this.handleEnter.bind(this)(e)}
                     />
                 </Col>
                 <Col sm={3}> 
