@@ -2,6 +2,7 @@ import * as _ from 'lodash';
 
 export class SetGameState {
     _id: string;
+    room: string;
     cards: Array<string>;
     deck: Array<string>;
     score: { [username: string]: number; };
@@ -21,7 +22,7 @@ let newDeck = ['01',
 
 if (Meteor.isServer) {
     Meteor.publish('gamestate', function(room: string) {
-        return SetGameStateCollection.findOne({room: room}, {fields: {cards: 1, score: 1}});
+        return SetGameStateCollection.find({room: room}, {fields: {cards: 1, score: 1}});
     })
 }
 
@@ -30,6 +31,7 @@ Meteor.methods({
         if (!Meteor.user() || Meteor.isClient)
             return;
         var state = new SetGameState();
+        state.room = room;
         state.deck = _.shuffle(newDeck);
         state.cards = new Array<string>();
         for (let i = 0; i < 12; i++) 
@@ -43,17 +45,17 @@ Meteor.methods({
             return;
         var state = SetGameStateCollection.findOne({room: room});
         
-        let card1 = parseInt(state.cards[idx1]);
+        let card1 = parseInt(state.cards[idx1]) - 1;
         let card1att1 = card1 % 3;
         let card1att2 = Math.floor(card1 / 3) % 3;
         let card1att3 = Math.floor(card1 / 9) % 3;
         let card1att4 = Math.floor(card1 / 27);
-        let card2 = parseInt(state.cards[idx2]);
+        let card2 = parseInt(state.cards[idx2]) - 1;
         let card2att1 = card2 % 3;
         let card2att2 = Math.floor(card2 / 3) % 3;
         let card2att3 = Math.floor(card2 / 9) % 3;
         let card2att4 = Math.floor(card2 / 27);
-        let card3 = parseInt(state.cards[idx3]);
+        let card3 = parseInt(state.cards[idx3]) - 1;
         let card3att1 = card3 % 3;
         let card3att2 = Math.floor(card3 / 3) % 3;
         let card3att3 = Math.floor(card3 / 9) % 3;
@@ -69,7 +71,12 @@ Meteor.methods({
                 state.score[Meteor.user().username] += 3;
             else
                 state.score[Meteor.user().username] = 3;
-            if (state.deck.length > 0) {
+            if (state.cards.length > 12) {
+                state.cards[idx1] = '';
+                state.cards[idx2] = '';
+                state.cards[idx3] = '';
+                state.cards = state.cards.filter(s => s.length != 0);
+            } else if (state.deck.length > 0) {
                 state.cards[idx1] = state.deck.pop();
                 state.cards[idx2] = state.deck.pop();
                 state.cards[idx3] = state.deck.pop();

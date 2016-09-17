@@ -12,7 +12,7 @@ export const ChatMessageCollection = new Mongo.Collection<ChatMessage>('chatmess
 
 if (Meteor.isServer) {
     Meteor.publish('chatMessages', function(room: String) {
-        return ChatMessageCollection.find({room: room}, {sort: {time: -1}, limit: 14});
+        return ChatMessageCollection.find({room: room}, {sort: {time: -1}, limit: 10});
     });
 }
 
